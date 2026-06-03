@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サービスセンター職場運営ガイドライン</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f3ef;
+  --surface: #ffffff;
+  --border: #e3e1da;
+  --text: #1a1916;
+  --muted: #6b6960;
+  --accent: #1a4f7a;
+  --accent-l: #e8f0f8;
+  --accent-h: #143d60;
+  --mgr: #4a2d7a;
+  --mgr-l: #f0ebfa;
+  --coral: #c94040;
+  --coral-l: #fdf0f0;
+  --nav-w: 210px;
+  --side-w: 220px;
+  --top-h: 52px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.75; height: 100vh; overflow: hidden; }
+
+/* ===== TOPBAR ===== */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--top-h);
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; padding: 0 16px; gap: 12px; z-index: 200;
+}
+#topbar .logo { font-family: 'Noto Serif JP',serif; font-size: 15px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#topbar .logo small { font-size: 10px; font-weight: 400; opacity: .65; margin-left: 8px; font-family: 'Noto Sans JP',sans-serif; }
+#search-input {
+  width: 220px; padding: 5px 12px; border-radius: 16px;
+  border: 1.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.15);
+  color: #fff; font-size: 12px; font-family: inherit; outline: none; transition: all .2s;
+}
+#search-input::placeholder { color: rgba(255,255,255,.55); }
+#search-input:focus { background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.6); width: 280px; }
+.ubadge { display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 16px; font-size: 11px; border: 1px solid rgba(255,255,255,.3); cursor: pointer; white-space: nowrap; }
+.ubadge:hover { background: rgba(255,255,255,.12); }
+.bdot { width: 7px; height: 7px; border-radius: 50%; background: #7effc4; }
+.bdot.m { background: #d4aaff; }
+.rsw { display: flex; align-items: center; gap: 4px; font-size: 10px; opacity: .8; white-space: nowrap; }
+.rsw select { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: 4px; padding: 2px 4px; font-size: 10px; font-family: inherit; cursor: pointer; }
+.rsw select option { color: #000; background: #fff; }
+
+/* ===== 3カラムレイアウト ===== */
+#layout {
+  display: grid;
+  /* 左目次:固定 / 本文:可変 / 右意見:固定 */
+  grid-template-columns: var(--nav-w) 1fr var(--side-w);
+  height: calc(100vh - var(--top-h));
+  margin-top: var(--top-h);
+  overflow: hidden;
+}
+
+/* ===== 左：目次サイドバー ===== */
+#nav {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 12px 0;
+}
+.nav-filter { padding: 0 10px 10px; }
+.nav-filter input {
+  width: 100%; padding: 5px 10px; border: 1px solid var(--border);
+  border-radius: 6px; font-size: 11px; font-family: inherit; background: var(--bg); outline: none;
+}
+.nav-filter input:focus { border-color: var(--accent); }
+.nav-label { font-size: 9px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 8px 14px 4px; }
+.nav-ch {
+  display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+  font-size: 12px; font-weight: 500; cursor: pointer; transition: background .12s;
+  border-left: 3px solid transparent; color: var(--text);
+}
+.nav-ch:hover { background: var(--bg); }
+.nav-ch.active { border-left-color: var(--accent); color: var(--accent); background: var(--accent-l); }
+.nav-ch.mgr { color: var(--mgr); }
+.ch-ico { width: 19px; height: 19px; border-radius: 4px; background: var(--accent-l); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+.ch-ico.m { background: var(--mgr-l); color: var(--mgr); }
+.ch-badge { margin-left: auto; font-size: 8px; padding: 1px 4px; border-radius: 8px; background: var(--mgr-l); color: var(--mgr); }
+.nav-secs { padding: 0 0 4px 33px; }
+.nav-sec { display: block; padding: 3px 14px; font-size: 11px; color: var(--muted); cursor: pointer; border-radius: 4px; transition: all .1s; }
+.nav-sec:hover { color: var(--accent); background: var(--accent-l); }
+.nav-sec.active { color: var(--accent); font-weight: 500; }
+
+/* ===== 中央：本文 ===== */
+#main {
+  overflow-y: auto;
+  background: var(--bg);
+  padding: 0;
+}
+.content-inner { max-width: 680px; margin: 0 auto; padding: 28px 28px 60px; }
+.breadcrumb { font-size: 11px; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 4px; }
+.art-header { margin-bottom: 22px; border-bottom: 2px solid var(--border); padding-bottom: 18px; }
+.art-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 500; margin-bottom: 8px; }
+.art-tag.g { background: var(--accent-l); color: var(--accent); }
+.art-tag.m { background: var(--mgr-l); color: var(--mgr); }
+.art-title { font-family: 'Noto Serif JP',serif; font-size: 22px; font-weight: 600; line-height: 1.4; margin-bottom: 7px; }
+.art-meta { font-size: 11px; color: var(--muted); display: flex; gap: 12px; }
+
+/* コンテンツブロック */
+.cb {
+  position: relative; padding: 12px 14px; border-radius: 7px;
+  transition: background .15s; border-left: 3px solid transparent; margin-bottom: 2px;
+}
+.cb:hover { background: rgba(26,79,122,.04); border-left-color: rgba(26,79,122,.18); }
+.cb:hover .ba { opacity: 1; pointer-events: auto; }
+.cb p { line-height: 1.85; }
+.cb h2 { font-size: 16px; font-weight: 700; margin-bottom: 2px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.cb h3 { font-size: 14px; font-weight: 700; }
+
+/* ブロックアクション */
+.ba {
+  position: absolute; right: 10px; top: 8px;
+  display: flex; align-items: center; gap: 5px;
+  opacity: 0; pointer-events: none; transition: opacity .15s;
+}
+.ba-btn {
+  display: flex; align-items: center; gap: 3px; padding: 3px 9px;
+  border-radius: 14px; border: 1px solid var(--border); background: var(--surface);
+  font-size: 11px; font-family: inherit; cursor: pointer; color: var(--muted);
+  transition: all .12s; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.ba-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-l); }
+.ba-btn.liked { border-color: var(--coral); color: var(--coral); background: var(--coral-l); }
+
+/* コメントスレッド（本文内） */
+.ct {
+  margin: 3px 0 6px 14px; border-left: 2px solid var(--border);
+  padding: 8px 12px; border-radius: 0 6px 6px 0;
+  background: var(--bg); display: none;
+}
+.ct.open { display: block; }
+.ct-row { display: flex; gap: 7px; align-items: flex-start; }
+.ct-av { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.ct-av.m { background: var(--mgr); }
+.ct-inp {
+  flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: 7px;
+  font-size: 12px; font-family: inherit; resize: none; min-height: 34px;
+  background: var(--surface); outline: none; transition: border-color .15s, min-height .15s;
+}
+.ct-inp:focus { border-color: var(--accent); min-height: 64px; }
+.ct-send {
+  padding: 5px 12px; background: var(--accent); color: #fff; border: none;
+  border-radius: 5px; font-size: 11px; font-family: inherit; cursor: pointer; font-weight: 500;
+  transition: background .12s; margin-top: 1px;
+}
+.ct-send:hover { background: var(--accent-h); }
+.ct-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.ct-item { background: var(--surface); border-radius: 6px; padding: 7px 10px; border: 1px solid var(--border); }
+.ct-meta { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.ct-text { font-size: 12px; line-height: 1.6; }
+
+/* callout */
+.callout { border-radius: 6px; padding: 10px 14px; margin: 3px 0; border-left: 4px solid; }
+.callout.info { background: var(--accent-l); border-color: var(--accent); }
+.callout.warn { background: #fef9ec; border-color: #c9920a; }
+.callout .ct-t { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+.callout.info .ct-t { color: var(--accent); }
+.callout.warn .ct-t { color: #a07208; }
+.mgr-block { background: var(--mgr-l); border: 1px solid #d4aaff; border-left: 4px solid var(--mgr); border-radius: 6px; padding: 10px 14px; margin: 3px 0; }
+.mgr-block .lbl { font-size: 9px; font-weight: 700; color: var(--mgr); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px; }
+.mgr-block p { color: #3a1f5c; font-size: 13px; }
+
+mark { background: #fff176; padding: 0 2px; border-radius: 2px; }
+
+/* ===== 右：意見集約サイドバー ===== */
+#side {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.side-header {
+  padding: 14px 14px 10px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--surface); z-index: 10;
+}
+.side-header h3 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.side-header p { font-size: 10px; color: var(--muted); }
+.side-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.s-tab {
+  flex: 1; padding: 7px 0; text-align: center; font-size: 11px; cursor: pointer;
+  color: var(--muted); border-bottom: 2px solid transparent; transition: all .12s;
+}
+.s-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+
+/* 意見一覧 */
+.side-body { flex: 1; padding: 10px; overflow-y: auto; }
+.opinion-item {
+  padding: 9px 10px; border-radius: 7px; border: 1px solid var(--border);
+  margin-bottom: 7px; background: var(--bg); cursor: pointer; transition: border-color .12s;
+}
+.opinion-item:hover { border-color: var(--accent); }
+.oi-section { font-size: 9px; color: var(--muted); margin-bottom: 3px; }
+.oi-text { font-size: 11px; line-height: 1.55; color: var(--text); }
+.oi-meta { font-size: 9px; color: var(--muted); margin-top: 4px; display: flex; justify-content: space-between; }
+
+/* いいねランキング */
+.like-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 7px; border: 1px solid var(--border);
+  margin-bottom: 6px; background: var(--bg); cursor: pointer; transition: border-color .12s;
+}
+.like-item:hover { border-color: var(--coral); }
+.like-num { font-size: 18px; font-weight: 700; color: var(--coral); min-width: 28px; text-align: center; }
+.like-info { flex: 1; min-width: 0; }
+.like-sec { font-size: 10px; color: var(--muted); }
+.like-title { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.like-bar-wrap { height: 3px; background: var(--border); border-radius: 2px; margin-top: 3px; }
+.like-bar { height: 3px; background: var(--coral); border-radius: 2px; }
+
+.empty-state { text-align: center; padding: 20px 10px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+
+/* ===== ログイン ===== */
+#login-screen { position: fixed; inset: 0; background: var(--accent); display: flex; align-items: center; justify-content: center; z-index: 500; }
+.login-box { background: var(--surface); border-radius: 14px; padding: 34px 42px; width: 340px; box-shadow: 0 8px 40px rgba(0,0,0,.2); text-align: center; }
+.login-box h1 { font-family: 'Noto Serif JP',serif; font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+.login-box p { font-size: 11px; color: var(--muted); margin-bottom: 22px; }
+.lopt { padding: 11px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--surface); cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; transition: all .15s; text-align: left; display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 8px; }
+.lopt:hover { border-color: var(--accent); background: var(--accent-l); }
+.lopt.m:hover { border-color: var(--mgr); background: var(--mgr-l); }
+.lopt .ldot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.lopt-sub { font-size: 10px; color: var(--muted); font-weight: 400; }
+.login-note { font-size: 10px; color: var(--muted); margin-top: 12px; }
+
+/* ===== 検索パネル ===== */
+#search-panel { display: none; position: fixed; top: var(--top-h); left: var(--nav-w); right: var(--side-w); background: rgba(0,0,0,.35); z-index: 150; padding: 16px; }
+#search-panel.show { display: block; }
+#search-results { background: var(--surface); border-radius: 10px; max-width: 600px; margin: 0 auto; padding: 16px; max-height: calc(100vh - 90px); overflow-y: auto; box-shadow: 0 4px 24px rgba(0,0,0,.15); }
+.sr-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.sr-hdr h3 { font-size: 12px; font-weight: 700; }
+.sr-close { background: none; border: none; cursor: pointer; font-size: 18px; color: var(--muted); }
+.sr-item { padding: 9px; border-radius: 6px; cursor: pointer; transition: background .12s; border: 1px solid transparent; margin-bottom: 5px; }
+.sr-item:hover { background: var(--bg); border-color: var(--border); }
+.si-ch { font-size: 9px; color: var(--muted); margin-bottom: 2px; }
+.si-title { font-size: 12px; font-weight: 500; margin-bottom: 2px; }
+.si-snip { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+#toast { position: fixed; bottom: 20px; right: 20px; padding: 8px 16px; background: #1a1916; color: #fff; border-radius: 6px; font-size: 12px; opacity: 0; transform: translateY(6px); transition: all .2s; z-index: 1000; pointer-events: none; }
+#toast.show { opacity: 1; transform: translateY(0); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>サービスセンター<br>職場運営ガイドライン</h1>
+    <p>アカウントを選択してください（デモ）</p>
+    <button class="lopt" onclick="login('general')">
+      <span class="ldot" style="background:#2a7a4a"></span>
+      <div><div>一般職アカウント</div><div class="lopt-sub">一般職向けコンテンツのみ閲覧</div></div>
+    </button>
+    <button class="lopt m" onclick="login('manager')">
+      <span class="ldot" style="background:var(--mgr)"></span>
+      <div><div>管理職アカウント</div><div class="lopt-sub">全コンテンツ閲覧 ＋ 管理機能</div></div>
+    </button>
+    <div class="login-note">※ これはデモ画面です</div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="logo">サービスセンター職場運営ガイドライン <small id="role-label"></small></div>
+  <input type="text" id="search-input" placeholder="🔍 キーワード検索..." oninput="liveSearch(this.value)">
+  <div class="ubadge" onclick="logout()">
+    <span class="bdot" id="bdot"></span>
+    <span id="uname"></span>
+    <span style="opacity:.6;font-size:9px">▾</span>
+  </div>
+  <div class="rsw">切替▸
+    <select onchange="switchRole(this.value)">
+      <option value="general">一般職</option>
+      <option value="manager">管理職</option>
+    </select>
+  </div>
+</div>
+
+<!-- 3カラム -->
+<div id="layout">
+  <!-- 左：目次 -->
+  <div id="nav">
+    <div class="nav-filter"><input type="text" placeholder="目次を絞り込む..." oninput="filterNav(this.value)"></div>
+    <div id="nav-list"></div>
+  </div>
+
+  <!-- 中央：本文 -->
+  <div id="main">
+    <div class="content-inner" id="content-inner"></div>
+  </div>
+
+  <!-- 右：意見集約 -->
+  <div id="side">
+    <div class="side-header">
+      <h3>💬 意見・評価</h3>
+      <p>各段落へのフィードバック</p>
+    </div>
+    <div class="side-tabs">
+      <div class="s-tab active" id="tab-opinions" onclick="switchTab('opinions')">意見一覧</div>
+      <div class="s-tab" id="tab-likes" onclick="switchTab('likes')">いいね順</div>
+    </div>
+    <div class="side-body" id="side-body"></div>
+  </div>
+</div>
+
+<!-- SEARCH PANEL -->
+<div id="search-panel" onclick="if(event.target===this)hideSearch()">
+  <div id="search-results">
+    <div class="sr-hdr"><h3 id="sr-title">検索結果</h3><button class="sr-close" onclick="hideSearch()">✕</button></div>
+    <div id="sr-list"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ========== DATA ==========
+const SECTIONS = [
+  { id:'s1', chTitle:'第1章　総則・基本方針', chNum:'1', role:'general', title:'1.1　目的と適用範囲',
+    blocks:[
+      {id:'b1-1',type:'p', text:'本ガイドラインは、当社の全職員が業務を遂行するにあたり守るべき基本的な行動規範および手続きを定めたものです。適用範囲は正規雇用職員のみならず、契約社員・派遣社員を含む全ての就業者に及びます。'},
+      {id:'b1-2',type:'callout-info', title:'📌 重要', text:'本ガイドラインは毎年4月に見直しを行い、改訂版を公開します。常に最新版をご確認ください。'},
+      {id:'b1-3',type:'p', text:'本規程に定めがない事項については、関連法令および社内規程に従うものとします。疑義が生じた場合は、所属部門の責任者を通じて人事部に確認してください。'},
+    ]
+  },
+  { id:'s2', chTitle:'第1章　総則・基本方針', chNum:'1', role:'general', title:'1.2　基本理念',
+    blocks:[
+      {id:'b2-1',type:'p', text:'当社は「安全・正確・誠実」を企業理念として掲げ、お客様・地域社会・従業員すべてに対して責任ある行動をとることを使命としています。'},
+      {id:'b2-2',type:'p', text:'全職員はこの理念を常に意識し、日常業務においても体現するよう努めてください。'},
+    ]
+  },
+  { id:'s3', chTitle:'第2章　勤務・服務規律', chNum:'2', role:'general', title:'2.1　勤務時間・休憩',
+    blocks:[
+      {id:'b3-1',type:'p', text:'標準勤務時間は 9:00〜18:00（休憩1時間）です。フレックスタイム制度適用者はコアタイム（10:00〜15:00）に出勤することが必要です。'},
+      {id:'b3-2',type:'callout-warn', title:'⚠ 注意', text:'残業は事前申請が必要です。月45時間を超える場合は上長・人事部への報告が義務付けられます。'},
+      {id:'b3-3',type:'p', text:'テレワーク勤務者は、始業・終業時刻をTeams上で報告することを義務付けています。'},
+    ]
+  },
+  { id:'s4', chTitle:'第2章　勤務・服務規律', chNum:'2', role:'general', title:'2.2　服装・身だしなみ',
+    blocks:[
+      {id:'b4-1',type:'p', text:'職場環境にふさわしい清潔感ある服装を心がけてください。制服着用が定められている部署は規定に従ってください。'},
+      {id:'b4-2',type:'p', text:'客先訪問時はビジネスフォーマルを基本とします。カジュアル勤務が認められている部署でも、外部対応業務では適切な服装に変更してください。'},
+    ]
+  },
+  { id:'s5', chTitle:'第3章　情報セキュリティ', chNum:'3', role:'general', title:'3.1　情報管理の基本',
+    blocks:[
+      {id:'b5-1',type:'p', text:'業務上知り得た情報（顧客情報・社内情報・技術情報）は厳重に管理し、在職中のみならず退職後も第三者への漏洩を禁じます。'},
+      {id:'b5-2',type:'callout-info', title:'💡 ヒント', text:'不審なメール・添付ファイルは開かず、ITヘルプデスク（内線：1234）へ即報告してください。'},
+    ]
+  },
+  { id:'s6', chTitle:'第4章　評価・給与（管理職向け）', chNum:'M', role:'manager', title:'4.1　評価制度の運用',
+    blocks:[
+      {id:'b6-1',type:'mgr', title:'👔 管理職限定', text:'半期ごとの評価において、S/A/B/C/Dの5段階で評価します。評価配分の目安は S:5% A:20% B:60% C:12% D:3% です。'},
+      {id:'b6-2',type:'p', text:'目標設定はSMART原則に基づき、部下と協議の上で決定してください。評価の客観性・透明性を担保するため、複数のエビデンスを記録しておくことを推奨します。'},
+    ]
+  },
+];
+
+// デモ用初期データ
+const DEMO_LIKES = {
+  'b1-1':14,'b1-2':8,'b1-3':5,'b2-1':9,'b2-2':6,
+  'b3-1':18,'b3-2':12,'b3-3':7,'b4-1':4,'b4-2':3,
+  'b5-1':22,'b5-2':11,'b6-1':5,'b6-2':4
+};
+const DEMO_COMMENTS = [
+  {blockId:'b3-1', author:'山田 花子', time:'5/16 09:12', text:'フレックスのコアタイムがどこに書いてあるか分かりにくかったです。'},
+  {blockId:'b5-1', author:'鈴木 一郎', time:'5/15 14:33', text:'退職後の情報管理についてもう少し具体的に書いてほしいです。'},
+  {blockId:'b1-2', author:'高橋 次郎', time:'5/14 11:05', text:'毎年更新されるなら通知をしてほしいです。'},
+];
+
+let role = 'general';
+let activeSecId = 's1';
+let likes = {};
+let comments = JSON.parse(JSON.stringify(DEMO_COMMENTS));
+let cmtOpen = {};
+let cmtIdSeq = 100;
+let activeTab = 'opinions';
+
+// ========== LOGIN ==========
+function login(r) {
+  role = r;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('role-label').textContent = r==='manager'?'[管理職]':'[一般職]';
+  document.getElementById('uname').textContent = r==='manager'?'田中 部長':'佐藤 太郎';
+  document.getElementById('bdot').className = 'bdot'+(r==='manager'?' m':'');
+  document.querySelector('.rsw select').value = r;
+  renderNav(); renderSection('s1'); renderSide();
+}
+function logout() { document.getElementById('login-screen').style.display='flex'; }
+function switchRole(r) {
+  role=r;
+  document.getElementById('role-label').textContent = r==='manager'?'[管理職]':'[一般職]';
+  document.getElementById('uname').textContent = r==='manager'?'田中 部長':'佐藤 太郎';
+  document.getElementById('bdot').className='bdot'+(r==='manager'?' m':'');
+  renderNav();
+  const vis=visSections();
+  if(vis.length) renderSection(vis[0].id);
+  renderSide();
+}
+
+// ========== NAV ==========
+function visSections(f='') {
+  return SECTIONS.filter(s=>(role==='manager'||s.role==='general')&&(!f||(s.title+s.chTitle).includes(f)));
+}
+function renderNav(f='') {
+  let lastCh=''; let html='';
+  visSections(f).forEach(s=>{
+    if(s.chTitle!==lastCh) {
+      if(lastCh) html+='</div>';
+      html+=`<div class="nav-label">${s.chTitle}</div>
+      <div class="nav-ch ${s.role==='manager'?'mgr':''} ${s.id===activeSecId?'active':''}" onclick="renderSection('${s.id}')">
+        <span class="ch-ico ${s.role==='manager'?'m':''}">${s.chNum}</span>
+        <span style="font-size:11px">${s.chTitle.replace(/第.章　/,'')}</span>
+        ${s.role==='manager'?'<span class="ch-badge">管理職</span>':''}
+      </div><div class="nav-secs">`;
+      lastCh=s.chTitle;
+    }
+    html+=`<a class="nav-sec ${s.id===activeSecId?'active':''}" onclick="renderSection('${s.id}')">${s.title}</a>`;
+  });
+  if(lastCh) html+='</div>';
+  document.getElementById('nav-list').innerHTML=html;
+}
+function filterNav(v){ renderNav(v); }
+
+// ========== RENDER SECTION ==========
+function renderSection(secId, hl='') {
+  activeSecId=secId;
+  renderNav();
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(!sec) return;
+
+  let html=`<div class="breadcrumb"><span>${sec.chTitle}</span> › <span>${sec.title}</span></div>
+  <div class="art-header">
+    <div class="art-tag ${sec.role==='manager'?'m':'g'}">${sec.role==='manager'?'👔 管理職向け':'📄 全職員共通'}</div>
+    <div class="art-title">${sec.title}</div>
+    <div class="art-meta"><span>最終更新: 2025年4月1日</span><span>更新者: 人事部</span></div>
+  </div>`;
+
+  sec.blocks.forEach(b=>{
+    const lc = getLikeCount(b.id);
+    const clist = comments.filter(c=>c.blockId===b.id);
+    const isLiked = likes[b.id]||false;
+    const isOpen = cmtOpen[b.id]||false;
+
+    let inner='';
+    if(b.type==='p') inner=`<p>${hl?b.text.replace(new RegExp(hl,'g'),`<mark>${hl}</mark>`):b.text}</p>`;
+    else if(b.type==='callout-info') inner=`<div class="callout info"><div class="ct-t">${b.title}</div>${b.text}</div>`;
+    else if(b.type==='callout-warn') inner=`<div class="callout warn"><div class="ct-t">${b.title}</div>${b.text}</div>`;
+    else if(b.type==='mgr') inner=`<div class="mgr-block"><div class="lbl">${b.title}</div><p>${b.text}</p></div>`;
+    else if(b.type==='heading') { html+=`<div class="cb">${`<h2>${b.text}</h2>`}</div>`; return; }
+
+    html+=`
+    <div class="cb" id="cb-${b.id}">
+      ${inner}
+      <div class="ba">
+        <button class="ba-btn ${isLiked?'liked':''}" onclick="toggleLike('${b.id}')">
+          ♥ <span id="lc-${b.id}">${lc}</span>
+        </button>
+        <button class="ba-btn" onclick="toggleCmt('${b.id}')">
+          💬 <span id="cc-${b.id}">${clist.length?clist.length+'件':'意見'}</span>
+        </button>
+      </div>
+    </div>
+    <div class="ct ${isOpen?'open':''}" id="ct-${b.id}">
+      <div class="ct-row">
+        <div class="ct-av ${role==='manager'?'m':''}">${role==='manager'?'田':'佐'}</div>
+        <textarea class="ct-inp" id="ci-${b.id}" placeholder="この内容へのご意見・質問..." rows="1"
+          onfocus="this.style.minHeight='64px'" onblur="if(!this.value)this.style.minHeight='34px'"></textarea>
+        <button class="ct-send" onclick="submitComment('${b.id}')">送信</button>
+      </div>
+      <div class="ct-list" id="cl-${b.id}">${renderCmtList(b.id)}</div>
+    </div>`;
+  });
+
+  document.getElementById('content-inner').innerHTML=html;
+  document.getElementById('main').scrollTop=0;
+}
+
+function renderCmtList(blockId) {
+  return comments.filter(c=>c.blockId===blockId).map(c=>`
+    <div class="ct-item">
+      <div class="ct-meta">${c.author} · ${c.time}</div>
+      <div class="ct-text">${c.text}</div>
+    </div>`).join('');
+}
+
+function getLikeCount(id) {
+  return (DEMO_LIKES[id]||0)+(likes[id]?1:0);
+}
+
+// ========== ACTIONS ==========
+function toggleLike(id) {
+  likes[id]=!likes[id];
+  const btn=document.querySelector(`#cb-${id} .ba-btn`);
+  if(btn) btn.className='ba-btn'+(likes[id]?' liked':'');
+  const lc=document.getElementById('lc-'+id);
+  if(lc) lc.textContent=getLikeCount(id);
+  showToast(likes[id]?'👍 いいねしました':'いいねを取り消しました');
+  renderSide();
+}
+
+function toggleCmt(id) {
+  cmtOpen[id]=!cmtOpen[id];
+  const el=document.getElementById('ct-'+id);
+  if(el) el.className='ct'+(cmtOpen[id]?' open':'');
+  if(cmtOpen[id]) setTimeout(()=>{ const ci=document.getElementById('ci-'+id); if(ci) ci.focus(); },50);
+}
+
+function submitComment(blockId) {
+  const ci=document.getElementById('ci-'+blockId);
+  const text=ci?.value.trim();
+  if(!text){ showToast('コメントを入力してください'); return; }
+  const now=new Date();
+  const time=`${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  comments.push({blockId, author:role==='manager'?'田中 部長':'佐藤 太郎', time, text});
+  if(ci) ci.value='';
+  const cl=document.getElementById('cl-'+blockId);
+  if(cl) cl.innerHTML=renderCmtList(blockId);
+  const cc=document.getElementById('cc-'+blockId);
+  if(cc) cc.textContent=comments.filter(c=>c.blockId===blockId).length+'件';
+  showToast('✅ 意見を送信しました');
+  renderSide();
+}
+
+// ========== 右サイドバー ==========
+function switchTab(tab) {
+  activeTab=tab;
+  document.getElementById('tab-opinions').className='s-tab'+(tab==='opinions'?' active':'');
+  document.getElementById('tab-likes').className='s-tab'+(tab==='likes'?' active':'');
+  renderSide();
+}
+
+function findBlockLabel(blockId) {
+  for(const s of SECTIONS) {
+    const b=s.blocks.find(b=>b.id===blockId);
+    if(b) return { sec: s.title, text: (b.text||b.title||'').substring(0,30)+'...' };
+  }
+  return { sec:'', text:'' };
+}
+
+function renderSide() {
+  const el=document.getElementById('side-body');
+  if(activeTab==='opinions') {
+    if(!comments.length) { el.innerHTML=`<div class="empty-state">まだ意見はありません。<br>各段落の💬ボタンから投稿できます。</div>`; return; }
+    el.innerHTML = comments.slice().reverse().map(c=>{
+      const lbl=findBlockLabel(c.blockId);
+      return `<div class="opinion-item" onclick="jumpTo('${c.blockId}')">
+        <div class="oi-section">${lbl.sec}</div>
+        <div class="oi-text">${c.text}</div>
+        <div class="oi-meta"><span>${c.author}</span><span>${c.time}</span></div>
+      </div>`;
+    }).join('');
+  } else {
+    const visSecs = visSections();
+    const allBlocks = visSecs.flatMap(s=>s.blocks.filter(b=>b.type!=='heading'));
+    const sorted = allBlocks.map(b=>({ b, count:getLikeCount(b.id) }))
+      .sort((a,b)=>b.count-a.count).slice(0,10);
+    const max = sorted[0]?.count||1;
+    el.innerHTML = sorted.map(({b,count})=>{
+      const lbl=findBlockLabel(b.id);
+      return `<div class="like-item" onclick="jumpTo('${b.id}')">
+        <div class="like-num">${count}</div>
+        <div class="like-info">
+          <div class="like-sec">${lbl.sec}</div>
+          <div class="like-title">${(b.text||b.title||'').substring(0,22)}...</div>
+          <div class="like-bar-wrap"><div class="like-bar" style="width:${Math.round(count/max*100)}%"></div></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function jumpTo(blockId) {
+  const el=document.getElementById('cb-'+blockId);
+  if(!el) {
+    // 別セクションかも → 探す
+    for(const s of SECTIONS) {
+      if(s.blocks.find(b=>b.id===blockId)) { renderSection(s.id); setTimeout(()=>jumpTo(blockId),100); return; }
+    }
+    return;
+  }
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+  el.style.background='rgba(26,79,122,.1)';
+  setTimeout(()=>el.style.background='',1200);
+}
+
+// ========== SEARCH ==========
+function liveSearch(v) {
+  if(!v.trim()){ hideSearch(); return; }
+  document.getElementById('search-panel').className='show';
+  const results=[];
+  visSections().forEach(s=>{
+    s.blocks.forEach(b=>{
+      const txt=(b.text||'')+(b.title||'');
+      if(txt.includes(v)){
+        const idx=txt.indexOf(v);
+        const snip=txt.substring(Math.max(0,idx-25),idx+65).replace(new RegExp(v,'g'),`<mark>${v}</mark>`);
+        results.push({s,b,snip});
+      }
+    });
+  });
+  document.getElementById('sr-title').textContent=`検索結果「${v}」— ${results.length}件`;
+  document.getElementById('sr-list').innerHTML=results.length
+    ? results.map(r=>`<div class="sr-item" onclick="selectResult('${r.s.id}','${v}')">
+        <div class="si-ch">${r.s.chTitle} › ${r.s.title}</div>
+        <div class="si-title">${r.s.title}</div>
+        <div class="si-snip">...${r.snip}...</div>
+      </div>`).join('')
+    : `<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">該当するページが見つかりませんでした</div>`;
+}
+function selectResult(secId,q){ hideSearch(); document.getElementById('search-input').value=q; renderSection(secId,q); }
+function hideSearch(){ document.getElementById('search-panel').className=''; }
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show';
+  setTimeout(()=>t.className='',2200);
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideSearch(); });
+</script>
+</body>
+</html>
